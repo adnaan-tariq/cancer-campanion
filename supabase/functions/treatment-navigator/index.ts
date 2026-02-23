@@ -382,8 +382,7 @@ Cover the full cycle. Group days where appropriate (e.g. "4-7"). Use warm, encou
     });
   } catch (e) {
     console.error("treatment-navigator error:", e);
-    const msg = e instanceof Error ? e.message : "Unknown error";
-    return new Response(JSON.stringify({ error: msg }), {
+    return new Response(JSON.stringify({ error: "Unexpected server error. Please try again later." }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

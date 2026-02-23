@@ -179,8 +179,7 @@ serve(async (req) => {
     });
   } catch (e) {
     console.error("scan-reader error:", e);
-    const msg = e instanceof Error ? e.message : "Unknown error";
-    return new Response(JSON.stringify({ error: msg }), {
+    return new Response(JSON.stringify({ error: "Unexpected server error. Please try again later." }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

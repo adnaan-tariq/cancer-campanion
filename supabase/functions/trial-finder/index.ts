@@ -356,7 +356,7 @@ Be compassionate and clear. If you can extract an NCT ID from the data, include 
       });
     }
 
-    return new Response(JSON.stringify({ error: msg }), {
+    return new Response(JSON.stringify({ error: "Unexpected server error. Please try again later." }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
