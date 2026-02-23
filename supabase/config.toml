@@ -1,0 +1,13 @@
+project_id = "hqfxitobtwmphuhftlwu"
+
+[functions.treatment-navigator]
+verify_jwt = false
+
+[functions.trial-finder]
+verify_jwt = false
+
+[functions.tts-generate]
+verify_jwt = false
+
+[functions.scan-reader]
+verify_jwt = false

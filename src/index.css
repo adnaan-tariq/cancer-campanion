@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=DM+Serif+Display:ital@0;1&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Medrotic-inspired vibrant blue palette */
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    /* Vibrant blue primary */
+    --primary: 221 83% 53%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Light blue-gray secondary */
+    --secondary: 214 32% 96%;
+    --secondary-foreground: 222 47% 20%;
+
+    --muted: 214 32% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    /* Soft blue accent */
+    --accent: 214 95% 93%;
+    --accent-foreground: 221 83% 40%;
+
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 20% 92%;
+    --input: 214 20% 92%;
+    --ring: 221 83% 53%;
+
+    --radius: 0.875rem;
+
+    /* Custom tokens — updated for Medrotic style */
+    --healing-green: 152 45% 45%;
+    --healing-green-light: 152 40% 95%;
+    --warm-peach: 20 80% 92%;
+    --warm-peach-dark: 20 55% 55%;
+    --sky-calm: 214 95% 96%;
+    --sky-calm-dark: 221 83% 53%;
+    --hope-gold: 42 80% 60%;
+    --hope-gold-light: 42 60% 95%;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 221 83% 53%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 214 32% 96%;
+    --sidebar-accent-foreground: 222 47% 11%;
+    --sidebar-border: 214 20% 92%;
+    --sidebar-ring: 221 83% 53%;
+  }
+
+  .dark {
+    --background: 222 47% 6%;
+    --foreground: 214 32% 95%;
+
+    --card: 222 40% 9%;
+    --card-foreground: 214 32% 95%;
+
+    --popover: 222 40% 9%;
+    --popover-foreground: 214 32% 95%;
+
+    --primary: 221 83% 58%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 222 30% 14%;
+    --secondary-foreground: 214 32% 85%;
+
+    --muted: 222 25% 14%;
+    --muted-foreground: 215 16% 55%;
+
+    --accent: 221 50% 18%;
+    --accent-foreground: 221 83% 75%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 222 25% 18%;
+    --input: 222 25% 18%;
+    --ring: 221 83% 58%;
+
+    --healing-green: 152 40% 50%;
+    --healing-green-light: 152 20% 14%;
+    --warm-peach: 20 40% 18%;
+    --warm-peach-dark: 20 55% 60%;
+    --sky-calm: 221 30% 14%;
+    --sky-calm-dark: 221 83% 60%;
+    --hope-gold: 42 70% 55%;
+    --hope-gold-light: 42 30% 14%;
+
+    --sidebar-background: 222 47% 6%;
+    --sidebar-foreground: 214 32% 95%;
+    --sidebar-primary: 221 83% 58%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 222 30% 14%;
+    --sidebar-accent-foreground: 214 32% 95%;
+    --sidebar-border: 222 25% 18%;
+    --sidebar-ring: 221 83% 58%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'DM Serif Display', serif;
+  }
+}
+
+@layer utilities {
+  .card-elevated {
+    @apply bg-card rounded-2xl border border-border/50 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.08)] transition-all duration-300;
+  }
+  .card-elevated:hover {
+    @apply shadow-[0_8px_40px_-8px_rgba(59,130,246,0.15)] -translate-y-0.5;
+  }
+}
