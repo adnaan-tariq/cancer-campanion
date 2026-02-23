@@ -6,10 +6,11 @@
  *   2. aimlapi.com — always-on fallback
  *
  * RESOURCE NOTE:
- *   We host MedGemma on Kaggle free-tier (30 GPU hrs/week, T4 GPU).
- *   Due to session timeouts and quota limits, the Kaggle endpoint may not
- *   always be available. The aimlapi fallback ensures uninterrupted functionality
- *   for competition judges evaluating at any time.
+ *   We host MedGemma on Kaggle free-tier (30 GPU hrs/week, T4 GPU) via this
+ *   public notebook: https://www.kaggle.com/code/adnaantariq/medgemma
+ *   If that primary Kaggle endpoint is unavailable (quota/timeouts), we
+ *   automatically fall back to external models (aimlapi / Perplexity) so the
+ *   clinical trial search remains available.
  */
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
@@ -356,7 +357,7 @@ Be compassionate and clear. If you can extract an NCT ID from the data, include 
       });
     }
 
-    return new Response(JSON.stringify({ error: "Unexpected server error. Please try again later." }), {
+    return new Response(JSON.stringify({ error: msg }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

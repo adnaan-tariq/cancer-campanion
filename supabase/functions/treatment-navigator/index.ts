@@ -7,10 +7,11 @@
  *   3. aimlapi.com — always-on fallback for all AI steps
  *
  * RESOURCE NOTE:
- *   We host MedGemma/TxGemma on Kaggle free-tier (30 GPU hrs/week, T4).
- *   Due to session timeouts and quota limits, the Kaggle endpoint may not always
- *   be available. The aimlapi fallback ensures uninterrupted functionality for
- *   competition judges evaluating at any time.
+ *   We host MedGemma/TxGemma on Kaggle free-tier (30 GPU hrs/week, T4) using
+ *   the public notebook here: https://www.kaggle.com/code/adnaantariq/medgemma
+ *   Kaggle is treated as the primary inference endpoint; if it is unavailable
+ *   (timeouts/quotas), we fall back to external models (aimlapi / Perplexity)
+ *   to keep the treatment navigation experience responsive.
  */
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
@@ -382,7 +383,8 @@ Cover the full cycle. Group days where appropriate (e.g. "4-7"). Use warm, encou
     });
   } catch (e) {
     console.error("treatment-navigator error:", e);
-    return new Response(JSON.stringify({ error: "Unexpected server error. Please try again later." }), {
+    const msg = e instanceof Error ? e.message : "Unknown error";
+    return new Response(JSON.stringify({ error: msg }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

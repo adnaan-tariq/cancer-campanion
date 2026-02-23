@@ -8,6 +8,7 @@ import AnalysisLoading from "@/components/AnalysisLoading";
 import AudioBriefingPlayer from "@/components/AudioBriefingPlayer";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { formatSupabaseFunctionInvokeError } from "@/lib/formatSupabaseFunctionError";
 
 type Trial = {
   id: string;
@@ -79,7 +80,7 @@ const TrialFinder = () => {
       setState("done");
     } catch (e: any) {
       console.error("Trial finder error:", e);
-      const msg = e?.message || "Something went wrong. Please try again.";
+      const msg = formatSupabaseFunctionInvokeError(e);
       setErrorMsg(msg);
       setState("error");
       toast({ title: "Error", description: msg, variant: "destructive" });

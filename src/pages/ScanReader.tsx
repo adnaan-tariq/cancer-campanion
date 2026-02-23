@@ -10,6 +10,7 @@ import AnalysisLoading from "@/components/AnalysisLoading";
 import AudioBriefingPlayer from "@/components/AudioBriefingPlayer";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
+import { formatSupabaseFunctionInvokeError } from "@/lib/formatSupabaseFunctionError";
 
 type AnalysisState = "idle" | "loading" | "done";
 
@@ -61,7 +62,7 @@ const ScanReader = () => {
       console.error("ScanReader error:", err);
       toast({
         title: "Analysis failed",
-        description: err instanceof Error ? err.message : "Could not analyze the report. Please try again.",
+        description: formatSupabaseFunctionInvokeError(err),
         variant: "destructive",
       });
       setState("idle");

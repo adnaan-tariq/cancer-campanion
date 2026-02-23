@@ -11,6 +11,7 @@ import AnalysisLoading from "@/components/AnalysisLoading";
 import AudioBriefingPlayer from "@/components/AudioBriefingPlayer";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { formatSupabaseFunctionInvokeError } from "@/lib/formatSupabaseFunctionError";
 
 type State = "idle" | "loading" | "done";
 
@@ -88,7 +89,7 @@ const TreatmentNavigator = () => {
       console.error("Analysis failed:", e);
       toast({
         title: "Analysis failed",
-        description: e.message || "Something went wrong. Please try again.",
+        description: formatSupabaseFunctionInvokeError(e),
         variant: "destructive",
       });
       setState("idle");

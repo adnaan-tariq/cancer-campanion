@@ -3,6 +3,7 @@ import { useState, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { formatSupabaseFunctionInvokeError } from "@/lib/formatSupabaseFunctionError";
 
 interface AudioBriefingPlayerProps {
   /** Pre-generated audio URL (data URI or blob URL) */
@@ -52,7 +53,7 @@ const AudioBriefingPlayer = ({
       console.error("TTS error:", e);
       toast({
         title: "Audio generation failed",
-        description: e?.message || "Could not generate audio. Please try again.",
+        description: formatSupabaseFunctionInvokeError(e),
         variant: "destructive",
       });
     } finally {

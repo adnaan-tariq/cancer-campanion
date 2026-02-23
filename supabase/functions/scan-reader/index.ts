@@ -6,6 +6,13 @@
  *   2. aimlapi.com (gpt-4o) — supports PDFs via file type, images via image_url
  *
  * Supports: PDF, JPG, PNG — uses multimodal vision for all file types.
+ *
+ * RESOURCE NOTE:
+ *   MedGemma is hosted on Kaggle free-tier via this notebook:
+ *   https://www.kaggle.com/code/adnaantariq/medgemma
+ *   We always prefer the Kaggle-hosted MedGemma model first, and only fall
+ *   back to external models (aimlapi gpt-4o) when that primary endpoint is
+ *   unavailable.
  */
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
@@ -179,7 +186,8 @@ serve(async (req) => {
     });
   } catch (e) {
     console.error("scan-reader error:", e);
-    return new Response(JSON.stringify({ error: "Unexpected server error. Please try again later." }), {
+    const msg = e instanceof Error ? e.message : "Unknown error";
+    return new Response(JSON.stringify({ error: msg }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
