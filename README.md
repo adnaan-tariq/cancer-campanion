@@ -2,21 +2,14 @@
 
 Cancer Companion is a Vite + React + TypeScript application that uses medical AI and Supabase Edge Functions to help translate reports, find matching trials, and guide patients through treatment in plain language.
 
-## Getting started
+This project is built as part of the **[Med-Gemma Impact Challenge](https://www.kaggle.com/competitions/med-gemma-impact-challenge)** and lives in this GitHub repository: **[adnaan-tariq/cancer-campanion](https://github.com/adnaan-tariq/cancer-campanion)**.
 
-You’ll need Node.js and npm installed (for example via [nvm](https://github.com/nvm-sh/nvm#installing-and-updating)).
+## Features
 
-```sh
-# Clone the repository
-git clone <YOUR_GIT_URL>
-cd <YOUR_PROJECT_NAME>
-
-# Install dependencies
-npm install
-
-# Start the development server
-npm run dev
-```
+- **Patient-friendly explanations** of medical reports using AI.
+- **Treatment navigation** to help patients understand options and next steps.
+- **Clinical trial discovery** powered by external AI APIs and Supabase Edge Functions.
+- **Modern UI** built with shadcn-ui and Tailwind CSS.
 
 ## Tech stack
 
@@ -27,6 +20,37 @@ This project is built with:
 - React
 - shadcn-ui
 - Tailwind CSS
+- Supabase (Edge Functions + Database)
+
+## Getting started
+
+You’ll need Node.js and npm installed (for example via [nvm](https://github.com/nvm-sh/nvm#installing-and-updating)).
+
+```sh
+# Clone the repository
+git clone https://github.com/adnaan-tariq/cancer-campanion.git
+cd cancer-campanion
+
+# Install dependencies
+npm install
+
+# Start the development server
+npm run dev
+```
+
+The development server URL (e.g. `http://localhost:5173`) will be printed in your terminal.
+
+## Environment variables
+
+Create a `.env` file in the project root (or `.env.local`) with your Supabase configuration:
+
+```env
+VITE_SUPABASE_PROJECT_ID="your-project-id"
+VITE_SUPABASE_PUBLISHABLE_KEY="your-anon-key"
+VITE_SUPABASE_URL="https://your-project-id.supabase.co"
+```
+
+**Do not commit real keys** – `.env` is already ignored via `.gitignore`.
 
 ## Hosting with your own Supabase
 
