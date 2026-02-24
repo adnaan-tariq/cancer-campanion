@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
-import { FileSearch, FlaskConical, Pill, ArrowRight, Heart, Shield, Users, Activity, Star, TrendingUp, Brain, Microscope, Dna, ExternalLink, Sparkles } from "lucide-react";
+import { FileSearch, FlaskConical, Pill, ArrowRight, Heart, Shield, Brain, Microscope, Dna, ExternalLink, Sparkles, Upload, Cpu, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
-import { BarChart, Bar, XAxis, ResponsiveContainer, Cell } from "recharts";
 
 const tools = [
   {
@@ -52,14 +51,25 @@ const models = [
   },
 ];
 
-const chartData = [
-  { day: "S", value: 65 },
-  { day: "M", value: 80 },
-  { day: "T", value: 55 },
-  { day: "W", value: 90 },
-  { day: "T", value: 70 },
-  { day: "F", value: 85 },
-  { day: "S", value: 60 },
+const steps = [
+  {
+    number: "01",
+    icon: Upload,
+    title: "Upload or Describe",
+    description: "Upload your radiology/pathology report, paste your oncology summary, or enter your chemo regimen.",
+  },
+  {
+    number: "02",
+    icon: Cpu,
+    title: "AI Analyzes",
+    description: "MedGemma & TxGemma process your input — extracting clinical details, matching trials, or mapping side effects.",
+  },
+  {
+    number: "03",
+    icon: FileText,
+    title: "Get Clarity",
+    description: "Receive plain-English explanations, matched trials with eligibility scores, or a day-by-day treatment guide.",
+  },
 ];
 
 const Index = () => {
@@ -155,93 +165,30 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Bento Stats Grid */}
+      {/* How It Works */}
       <section className="container relative z-10 pb-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          <div className="card-elevated p-8 md:p-10 flex flex-col justify-between bg-gradient-to-br from-primary/[0.03] to-transparent min-h-[340px]">
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <Heart className="h-5 w-5 text-primary" />
-                </div>
-                <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Why CancerCompanion</p>
-              </div>
-              <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground leading-tight mb-4">
-                Empowering Patients With{" "}
-                <span className="text-primary">MedGemma-Driven</span> Clarity
-              </h2>
-              <p className="text-muted-foreground leading-relaxed max-w-md">
-                We bridge the gap between complex medical reports and patient understanding, powered by Google's open-source MedGemma & TxGemma foundation models.
-              </p>
-            </div>
-            <div className="flex items-center gap-6 mt-8">
-              <div className="flex -space-x-3">
-                {[0, 1, 2, 3].map((i) => (
-                  <div key={i} className={`h-10 w-10 rounded-full border-2 border-background flex items-center justify-center text-xs font-bold text-white ${
-                    ["bg-blue-500", "bg-emerald-500", "bg-amber-500", "bg-violet-500"][i]
-                  }`}>
-                    {["S", "M", "A", "K"][i]}
-                  </div>
-                ))}
-              </div>
-              <div>
-                <p className="font-serif text-xl font-bold text-foreground">50k+</p>
-                <p className="text-xs text-muted-foreground">Patient Satisfaction</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="card-elevated p-8 md:p-10 min-h-[340px] flex flex-col">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="font-serif text-xl font-bold text-foreground">Healthcare Statistics</h3>
-              <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 bg-emerald-500/10 rounded-full px-3 py-1">
-                <TrendingUp className="h-3 w-3" /> +24%
-              </span>
-            </div>
-            <div className="text-center mt-4 mb-2">
-              <p className="font-serif text-5xl font-bold text-foreground">12,450</p>
-              <p className="text-sm text-muted-foreground mt-1">Active Patients This Month</p>
-            </div>
-            <div className="flex-1 mt-4 min-h-[120px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={chartData} barCategoryGap="20%">
-                  <XAxis
-                    dataKey="day"
-                    axisLine={false}
-                    tickLine={false}
-                    tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
-                  />
-                  <Bar dataKey="value" radius={[8, 8, 4, 4]}>
-                    {chartData.map((_, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={index === 3 ? "hsl(var(--primary))" : "hsl(var(--primary) / 0.25)"}
-                      />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
+        <div className="text-center mb-12">
+          <p className="text-sm font-semibold text-primary uppercase tracking-wider mb-3">How It Works</p>
+          <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground">
+            From Upload to Clarity in 3 Steps
+          </h2>
         </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-5">
-          {[
-            { label: "Reports Analyzed", value: "10k+", icon: Activity },
-            { label: "Trials Matched", value: "5k+", icon: FlaskConical },
-            { label: "Patient Rating", value: "4.9", icon: Star },
-            { label: "Users Helped", value: "8k+", icon: Users },
-          ].map((stat) => {
-            const Icon = stat.icon;
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {steps.map((step, i) => {
+            const Icon = step.icon;
             return (
-              <div key={stat.label} className="card-elevated p-5 flex items-center gap-4">
-                <div className="h-11 w-11 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                  <Icon className="h-5 w-5 text-primary" />
+              <div key={step.number} className="relative card-elevated p-8 text-center">
+                {i < steps.length - 1 && (
+                  <div className="hidden md:block absolute top-1/2 -right-3 -translate-y-1/2 z-10">
+                    <ArrowRight className="h-5 w-5 text-primary/40" />
+                  </div>
+                )}
+                <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
+                  <Icon className="h-7 w-7 text-primary" />
                 </div>
-                <div>
-                  <p className="font-serif text-2xl font-bold text-foreground leading-none">{stat.value}</p>
-                  <p className="text-xs text-muted-foreground mt-1">{stat.label}</p>
-                </div>
+                <span className="text-xs font-bold text-primary/60 uppercase tracking-widest">Step {step.number}</span>
+                <h3 className="font-serif text-xl font-bold text-foreground mt-2 mb-3">{step.title}</h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">{step.description}</p>
               </div>
             );
           })}

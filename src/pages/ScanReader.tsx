@@ -38,9 +38,11 @@ function arrayBufferToBase64(buffer: ArrayBuffer): string {
 const ScanReader = () => {
   const [state, setState] = useState<AnalysisState>("idle");
   const [results, setResults] = useState<ScanResults | null>(null);
+  const [analyzedFileName, setAnalyzedFileName] = useState<string | null>(null);
 
   const handleFileSelect = async (file: File) => {
     setState("loading");
+    setAnalyzedFileName(file.name);
     try {
       const buffer = await file.arrayBuffer();
       const base64 = arrayBufferToBase64(buffer);
@@ -131,6 +133,15 @@ const ScanReader = () => {
         {/* Results */}
         {state === "done" && results && (
           <div className="space-y-6 animate-fade-in-up">
+            {/* Analyzed file indicator */}
+            {analyzedFileName && (
+              <div className="inline-flex items-center gap-2 rounded-lg bg-primary/10 border border-primary/20 px-3 py-1.5 text-sm">
+                <FileSearch className="h-3.5 w-3.5 text-primary" />
+                <span className="text-muted-foreground">Results for:</span>
+                <span className="font-semibold text-foreground">{analyzedFileName}</span>
+              </div>
+            )}
+
             {/* Audio */}
             <AudioBriefingPlayer label="Listen to your scan explanation" audioUrl="" isGenerating={false} />
 
@@ -211,7 +222,7 @@ const ScanReader = () => {
 
             {/* Restart */}
             <div className="text-center">
-              <Button variant="outline" onClick={() => { setState("idle"); setResults(null); }}>
+              <Button variant="outline" onClick={() => { setState("idle"); setResults(null); setAnalyzedFileName(null); }}>
                 Analyze another report
               </Button>
             </div>

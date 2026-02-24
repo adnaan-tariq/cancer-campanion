@@ -3,7 +3,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Pill, AlertTriangle, Sun, Moon, Clock, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Layout from "@/components/Layout";
@@ -121,11 +121,11 @@ const TreatmentNavigator = () => {
 
         {state === "idle" && (
           <div className="space-y-4">
-            <Input
+            <Textarea
               value={regimen}
               onChange={(e) => setRegimen(e.target.value)}
               placeholder="e.g. FOLFOX (5-FU, Leucovorin, Oxaliplatin) — 14-day cycle"
-              className="text-base h-12"
+              className="min-h-[100px] text-base"
             />
             <Button onClick={handleAnalyze} size="lg" className="w-full sm:w-auto">
               Create my treatment guide

@@ -1,17 +1,22 @@
 import { Play, Pause, Volume2, Loader2 } from "lucide-react";
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { formatSupabaseFunctionInvokeError } from "@/lib/formatSupabaseFunctionError";
 
 interface AudioBriefingPlayerProps {
-  /** Pre-generated audio URL (data URI or blob URL) */
   audioUrl?: string;
-  /** Text to generate audio from on-demand (lazy mode) */
   ttsText?: string;
   label?: string;
   isGenerating?: boolean;
+}
+
+function formatTime(seconds: number): string {
+  if (!isFinite(seconds) || seconds < 0) return "0:00";
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60);
+  return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
 const AudioBriefingPlayer = ({
@@ -23,8 +28,43 @@ const AudioBriefingPlayer = ({
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [generatedUrl, setGeneratedUrl] = useState<string | null>(null);
+  const [progress, setProgress] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const progressBarRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const onTimeUpdate = () => {
+      setCurrentTime(audio.currentTime);
+      if (audio.duration) setProgress((audio.currentTime / audio.duration) * 100);
+    };
+    const onLoadedMetadata = () => setDuration(audio.duration);
+    const onEnded = () => { setIsPlaying(false); setProgress(0); setCurrentTime(0); };
+
+    audio.addEventListener("timeupdate", onTimeUpdate);
+    audio.addEventListener("loadedmetadata", onLoadedMetadata);
+    audio.addEventListener("ended", onEnded);
+
+    return () => {
+      audio.removeEventListener("timeupdate", onTimeUpdate);
+      audio.removeEventListener("loadedmetadata", onLoadedMetadata);
+      audio.removeEventListener("ended", onEnded);
+    };
+  }, [generatedUrl, audioUrl]);
+
+  const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
+    const audio = audioRef.current;
+    const bar = progressBarRef.current;
+    if (!audio || !bar || !audio.duration) return;
+    const rect = bar.getBoundingClientRect();
+    const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    audio.currentTime = ratio * audio.duration;
+  };
 
   const effectiveUrl = audioUrl || generatedUrl;
 
@@ -91,36 +131,54 @@ const AudioBriefingPlayer = ({
     );
   }
 
-  // Show player if we have audio OR ttsText (lazy mode)
   if (!effectiveUrl && !ttsText) return null;
 
+  const hasAudio = !!effectiveUrl;
+
   return (
-    <div className="flex items-center gap-3 rounded-xl bg-sky-calm p-4">
-      {effectiveUrl && (
-        <audio ref={audioRef} src={effectiveUrl} onEnded={() => setIsPlaying(false)} />
-      )}
-      {!effectiveUrl && <audio ref={audioRef} onEnded={() => setIsPlaying(false)} />}
-      <Button
-        onClick={togglePlay}
-        size="icon"
-        variant="default"
-        className="h-10 w-10 rounded-full shrink-0"
-        disabled={isLoading}
-      >
-        {isLoading ? (
-          <Loader2 className="h-4 w-4 animate-spin" />
-        ) : isPlaying ? (
-          <Pause className="h-4 w-4" />
-        ) : (
-          <Play className="h-4 w-4 ml-0.5" />
+    <div className="rounded-xl bg-sky-calm p-4 space-y-2.5">
+      {effectiveUrl && <audio ref={audioRef} src={effectiveUrl} />}
+      {!effectiveUrl && <audio ref={audioRef} />}
+      <div className="flex items-center gap-3">
+        <Button
+          onClick={togglePlay}
+          size="icon"
+          variant="default"
+          className="h-10 w-10 rounded-full shrink-0"
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : isPlaying ? (
+            <Pause className="h-4 w-4" />
+          ) : (
+            <Play className="h-4 w-4 ml-0.5" />
+          )}
+        </Button>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-medium truncate">{label}</p>
+          <p className="text-xs text-muted-foreground">
+            {isLoading ? "Generating audio..." : hasAudio ? "Listen to your personalized briefing" : "Click play to generate audio"}
+          </p>
+        </div>
+        {hasAudio && duration > 0 && (
+          <span className="text-xs text-muted-foreground tabular-nums shrink-0">
+            {formatTime(currentTime)} / {formatTime(duration)}
+          </span>
         )}
-      </Button>
-      <div>
-        <p className="text-sm font-medium">{label}</p>
-        <p className="text-xs text-muted-foreground">
-          {isLoading ? "Generating audio..." : effectiveUrl ? "Listen to your personalized briefing" : "Click play to generate audio"}
-        </p>
       </div>
+      {hasAudio && (
+        <div
+          ref={progressBarRef}
+          onClick={handleSeek}
+          className="h-1.5 w-full rounded-full bg-primary/20 cursor-pointer group"
+        >
+          <div
+            className="h-full rounded-full bg-primary transition-[width] duration-150"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      )}
     </div>
   );
 };

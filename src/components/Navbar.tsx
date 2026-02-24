@@ -1,11 +1,12 @@
 import { Link, useLocation } from "react-router-dom";
-import { Heart, FileSearch, FlaskConical, Pill, Menu, X, LogOut } from "lucide-react";
+import { Heart, FileSearch, FlaskConical, Pill, Menu, X, LogOut, Sun, Moon, Home } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTheme } from "@/hooks/use-theme";
 
 const navItems = [
-  { path: "/", label: "Home" },
+  { path: "/", label: "Home", icon: Home },
   { path: "/scan-reader", label: "ScanReader", icon: FileSearch },
   { path: "/trial-finder", label: "TrialFinder", icon: FlaskConical },
   { path: "/treatment-navigator", label: "Treatment", icon: Pill },
@@ -15,6 +16,7 @@ const Navbar = () => {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user, signOut } = useAuth();
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-lg supports-[backdrop-filter]:bg-background/80 border-b border-border/50">
@@ -47,8 +49,17 @@ const Navbar = () => {
           })}
         </div>
 
-        {/* CTA + Mobile toggle */}
-        <div className="flex items-center gap-3">
+        {/* CTA + Theme toggle + Mobile toggle */}
+        <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-xl"
+            onClick={toggleTheme}
+            aria-label="Toggle theme"
+          >
+            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </Button>
           {user ? (
             <Button
               variant="outline"
@@ -80,6 +91,7 @@ const Navbar = () => {
         <div className="md:hidden border-t bg-background p-4 space-y-1">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path;
+            const Icon = item.icon;
             return (
               <Link
                 key={item.path}
@@ -88,12 +100,13 @@ const Navbar = () => {
                 className="block"
               >
                 <div
-                  className={`px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
                     isActive
                       ? "text-primary bg-primary/10"
                       : "text-muted-foreground hover:text-foreground hover:bg-muted"
                   }`}
                 >
+                  <Icon className="h-4 w-4" />
                   {item.label}
                 </div>
               </Link>
