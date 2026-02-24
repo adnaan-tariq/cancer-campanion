@@ -32,23 +32,30 @@ const EmergencyContactBanner = () => {
           </div>
 
           {/* Contact items */}
-          <div className="flex items-center gap-1.5 flex-wrap">
-            {items.map((item) => {
-              const Icon = item.icon;
-              return (
-                <a
-                  key={item.label}
-                  href={`tel:${item.value.replace(/\s/g, "")}`}
-                  className="group flex items-center gap-1.5 rounded-lg bg-background/60 backdrop-blur-sm border border-border/50 px-2.5 py-1 transition-all hover:bg-primary/10 hover:border-primary/30 hover:shadow-sm"
-                >
-                  <Icon className="h-3.5 w-3.5 text-primary/70 group-hover:text-primary transition-colors" />
-                  <span className="text-xs text-muted-foreground">{item.label}</span>
-                  <span className="font-semibold text-xs text-foreground group-hover:text-primary transition-colors">
-                    {item.value}
-                  </span>
-                </a>
-              );
-            })}
+          <div className="flex flex-col gap-1.5">
+            <div className="flex items-center gap-1.5 flex-wrap">
+              {items.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <a
+                    key={item.label}
+                    href={`tel:${item.value.replace(/\s/g, "")}`}
+                    className="group flex items-center gap-1.5 rounded-lg bg-background/60 backdrop-blur-sm border border-border/50 px-2.5 py-1 transition-all hover:bg-primary/10 hover:border-primary/30 hover:shadow-sm"
+                  >
+                    <Icon className="h-3.5 w-3.5 text-primary/70 group-hover:text-primary transition-colors" />
+                    <span className="text-xs text-muted-foreground">{item.label}</span>
+                    <span className="font-semibold text-xs text-foreground group-hover:text-primary transition-colors">
+                      {item.value}
+                    </span>
+                  </a>
+                );
+              })}
+            </div>
+            <p className="text-[11px] text-muted-foreground">
+              We use your browser location and send it to BigDataCloud for reverse geocoding
+              to detect your country and show the right emergency numbers. No medical data
+              or identifiers are sent with this request.
+            </p>
           </div>
         </div>
 

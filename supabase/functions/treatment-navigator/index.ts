@@ -185,7 +185,10 @@ Return valid JSON: { "drugs": [{"name":"...","commonSideEffects":["..."]}], "cyc
       console.log("✅ Backup model responded successfully");
     }
 
-    console.log("Regimen parsed:", JSON.stringify(regimenData));
+    console.log(
+      "Regimen parsed successfully",
+      Array.isArray(regimenData?.drugs) ? `drugs=${regimenData.drugs.length}` : ""
+    );
 
     // ── Step 1.5: TxGemma drug interaction analysis ──
     const drugNames = (regimenData.drugs || []).map((d: any) => d.name);

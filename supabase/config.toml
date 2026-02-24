@@ -1,13 +1,13 @@
-project_id = "hqfxitobtwmphuhftlwu"
+project_id = "ldvhmnimeozveydriwbl"
 
 [functions.treatment-navigator]
-verify_jwt = false
+verify_jwt = true
 
 [functions.trial-finder]
-verify_jwt = false
+verify_jwt = true
 
 [functions.tts-generate]
-verify_jwt = false
+verify_jwt = true
 
 [functions.scan-reader]
 verify_jwt = false

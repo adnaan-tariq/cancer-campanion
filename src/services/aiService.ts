@@ -14,10 +14,12 @@
  *   - Same Kaggle server, endpoint: VITE_KAGGLE_MODEL_URL/txgemma/interact
  *   - Silently skipped if unavailable — does not affect other functionality
  *
- * FALLBACK: Claude Sonnet via aimlapi.com
+ * FALLBACK: Claude Sonnet via aimlapi.com (through Supabase Edge Function)
  *   - Activates automatically if MedGemma is unreachable
  *   - Ensures app remains fully functional regardless of Kaggle session state
- *   - Configured via VITE_AIMLAPI_KEY
+ *   - Implemented server-side in the `ai-router` Edge Function, which reads
+ *     AIMLAPI_API_KEY from Supabase secrets so the key is never exposed to
+ *     the browser.
  *
  * NOTE ON RESOURCE CONSTRAINTS:
  *   We attempted to self-host MedGemma and TxGemma models on Kaggle Notebooks
@@ -29,6 +31,8 @@
  *   When the Kaggle notebook is running, all requests go through the real
  *   MedGemma/TxGemma models as intended by the competition.
  */
+
+import { supabase } from "@/integrations/supabase/client";
 
 export type ModelSource =
   | "MedGemma (Primary)"
@@ -92,45 +96,29 @@ export async function getAIResponse(
     }
   }
 
-  // ── Fallback to aimlapi.com ──
+  // ── Fallback to aimlapi.com via Supabase Edge Function (`ai-router`) ──
   if (kaggleUrl) {
     console.log("🔄 Switching to aimlapi.com backup...");
     // Only show toast when we actually tried Kaggle and it failed
     showFallbackToast();
   }
 
-  const aimlKey = import.meta.env.VITE_AIMLAPI_KEY;
-  if (!aimlKey) {
-    throw new Error("No AI backend configured. Set VITE_KAGGLE_MODEL_URL or VITE_AIMLAPI_KEY.");
-  }
-
-  const res = await fetch("https://api.aimlapi.com/chat/completions", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${aimlKey}`,
-      "Content-Type": "application/json",
+  const { data, error } = await supabase.functions.invoke("ai-router", {
+    body: {
+      prompt,
+      systemPrompt,
     },
-    body: JSON.stringify({
-      model: "claude-sonnet-4-5",
-      messages: [
-        {
-          role: "system",
-          content: systemPrompt ||
-            "You are a helpful medical AI assistant. Answer questions related to health and medicine accurately and responsibly. Always remind users to consult a doctor for professional advice.",
-        },
-        { role: "user", content: prompt },
-      ],
-    }),
   });
 
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`aimlapi failed: ${res.status} — ${text}`);
+  if (error) {
+    throw error;
+  }
+  if (data?.error) {
+    throw new Error(data.error);
   }
 
-  const data = await res.json();
-  const content = data.choices?.[0]?.message?.content || "";
-  console.log("✅ Backup model responded successfully");
+  const content: string = data?.content ?? "";
+  console.log("✅ Backup model responded successfully via ai-router");
   updateStatus("Claude Sonnet (Backup)");
   return { content, source: "Claude Sonnet (Backup)" };
 }

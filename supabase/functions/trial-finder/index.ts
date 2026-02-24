@@ -151,7 +151,7 @@ Return valid JSON: { "cancerType": "...", "cancerSubtype": "...", "stage": "..."
       console.log("✅ Backup model responded successfully");
     }
 
-    console.log("Profile extracted:", JSON.stringify(profile));
+    console.log("Profile extracted successfully");
 
     // ── Step 2: Search for trials via Firecrawl ──
     console.log("Step 2: Searching for clinical trials...");

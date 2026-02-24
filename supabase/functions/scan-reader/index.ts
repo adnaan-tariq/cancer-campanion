@@ -79,7 +79,7 @@ serve(async (req) => {
       });
     }
 
-    console.log(`Processing file: ${fileName} (${mimeType})`);
+    console.log(`Processing file (type: ${mimeType})`);
 
     // Try MedGemma first (text-only, works if the file is a text report)
     const medgemmaResult = await tryKaggleMedGemma(
