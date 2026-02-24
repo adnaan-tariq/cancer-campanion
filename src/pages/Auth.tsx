@@ -17,6 +17,27 @@ const Auth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  const handleGoogleSignIn = async () => {
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: window.location.origin,
+        },
+      });
+
+      if (error) throw error;
+    } catch (error: any) {
+      toast({
+        title: "Google sign-in failed",
+        description: error.message || "Something went wrong with Google sign-in",
+        variant: "destructive",
+      });
+      setLoading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -94,6 +115,35 @@ const Auth = () => {
                 ? "Sign in to access your health tools"
                 : "Join us to start your care journey"}
             </p>
+          </div>
+
+          <div className="space-y-3">
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full h-12 rounded-xl text-base gap-3 border border-[#4285F4]/60 bg-background/90 hover:bg-[#4285F4]/5 shadow-md hover:shadow-lg transition-all"
+              onClick={handleGoogleSignIn}
+              disabled={loading}
+            >
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white shadow-sm overflow-hidden">
+                <img
+                  src="/google-logo.svg"
+                  alt="Google logo"
+                  className="h-5 w-5 object-contain"
+                />
+              </span>
+              <span className="font-medium text-sm sm:text-base">
+                Continue with <span className="text-[#4285F4]">Google</span>
+              </span>
+            </Button>
+
+            <div className="flex items-center gap-2">
+              <div className="h-px flex-1 bg-border" />
+              <span className="text-xs uppercase text-muted-foreground tracking-wide">
+                Or continue with email
+              </span>
+              <div className="h-px flex-1 bg-border" />
+            </div>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
