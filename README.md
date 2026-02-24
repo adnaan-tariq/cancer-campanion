@@ -120,4 +120,4 @@ npm install
 npm run dev
 ```
 
-The app uses only `VITE_SUPABASE_*` to talk to Supabase. Once the env points to your project and the functions are deployed and secrets are set, everything runs on your Supabase project.
+The app uses only `VITE_SUPABASE_*` to talk to Supabase. Once the env points to your project and the functions are deployed and secrets are set, everything runs on your Supabase project. 
